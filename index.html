@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mischief Managed | 2026 東京魔法與日常隨手記</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Noto+Sans+TC:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0a0a0f;
+            --text-light: #e0e0e0;
+            --accent-gold: #cfaa63;
+            --accent-blue: #4a90e2;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', 'Noto Sans TC', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-dark); }
+        ::-webkit-scrollbar-thumb { background: var(--accent-gold); border-radius: 4px; }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: url('assets/hero.png') center/cover no-repeat fixed;
+            text-align: center;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(to bottom, rgba(10,10,15,0.3) 0%, rgba(10,10,15,1) 100%);
+        }
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            padding: 2rem;
+            animation: fadeIn 2s ease-out;
+        }
+        .hero-subtitle {
+            color: var(--accent-gold);
+            font-size: 1.2rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+        .hero-title {
+            font-size: 4rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(45deg, #fff, var(--accent-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(207, 170, 99, 0.3);
+        }
+        
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+            color: var(--accent-gold);
+            font-size: 24px;
+        }
+
+        /* Layout */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        /* Glassmorphism Cards */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border-color: rgba(207, 170, 99, 0.3);
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            color: var(--accent-gold);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        h3 {
+            font-size: 1.5rem;
+            color: #fff;
+            margin: 1.5rem 0 0.5rem;
+        }
+
+        p {
+            font-size: 1.1rem;
+            color: #bbb;
+            margin-bottom: 1rem;
+        }
+
+        /* Grid Layouts */
+        .split-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+        .split-grid img {
+            width: 100%;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+            transition: transform 0.5s ease;
+        }
+        .split-grid img:hover {
+            transform: scale(1.02);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .feature-item {
+            background: rgba(255,255,255,0.02);
+            padding: 2rem;
+            border-radius: 15px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .feature-item h4 {
+            color: var(--accent-blue);
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Highlight Text */
+        .highlight {
+            color: #fff;
+            font-weight: bold;
+            border-bottom: 2px solid var(--accent-gold);
+        }
+
+        /* Stats */
+        .stats-box {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, rgba(207,170,99,0.1) 0%, rgba(10,10,15,0) 100%);
+            border-radius: 20px;
+            border: 1px solid var(--accent-gold);
+        }
+        .total-expense {
+            font-size: 4rem;
+            font-weight: 800;
+            color: var(--accent-gold);
+            margin: 1rem 0;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        /* Photo Gallery */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        .gallery-item {
+            overflow: hidden;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+        }
+        .gallery-item img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.5s ease;
+        }
+        .gallery-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.7);
+        }
+        .gallery-item:hover img {
+            transform: scale(1.05);
+        }
+        .gallery-item .overlay {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            padding: 1rem;
+            color: #fff;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+        .gallery-item:hover .overlay {
+            transform: translateY(0);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0) translateX(-50%); }
+            40% { transform: translateY(-20px) translateX(-50%); }
+            60% { transform: translateY(-10px) translateX(-50%); }
+        }
+
+        /* Reveal on Scroll */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease-out;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (max-width: 768px) {
+            .hero-title { font-size: 2.5rem; }
+            .split-grid { grid-template-columns: 1fr; }
+            .glass-card { padding: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-subtitle">2026 Tokyo Magic Trip</div>
+            <h1 class="hero-title">Mischief Managed</h1>
+            <p style="font-size: 1.2rem; max-width: 600px; margin: 0 auto; color: #ddd;">
+                這是一場策劃已久的魔法出逃。拋下日常，帶著我親手刻的 <a href="https://liwenchiou.github.io/Lumos-Tokyo-Guide/" target="_blank" style="color: var(--accent-gold); text-decoration: none; border-bottom: 1px solid;">Lumos 行程表</a>，<br>
+                赴一場走斷腿的東京之約。
+            </p>
+        </div>
+        <div class="scroll-indicator">↓</div>
+    </section>
+
+    <div class="container">
+        
+        <!-- Intro -->
+        <div class="glass-card reveal">
+            <h2>✨ 說走就走的雙向奔赴</h2>
+            <p>清晨六點的鬧鐘，劃破了原本應該賴床的寧靜。迅速搞定小寶的零食，我們拎著行李下樓。沒想到預約的接機大哥早就等在那裡，還熱心地幫忙扛行李——這種不用互相等待的<span class="highlight">「雙向奔赴」</span>，絕對是旅程最完美的開局。</p>
+            <p>到了機場，犯了個不大不小的蠢：明明手機裡躺著早就辦好的電子機票，偏偏手癢又去機器印了一張紙本，就當作實體的儀式感吧。在機場大口咬下碳烤香氣四溢的漢堡王，路過免稅店時順手噴了兩下傳說中的香奈兒 5 號……老婆皺眉說：「這怎麼像廁所芳香劑？」我笑了，乖，這大概就是我們窮人不懂的浪漫。搭上起降異常平滑的星宇航空，東京，我們來了。</p>
+        </div>
+
+        <!-- Highlights -->
+        <div class="glass-card reveal">
+            <h2>🔮 走斷腿的魔法與日常</h2>
+            
+            <div class="split-grid" style="margin-top: 2rem;">
+                <div>
+                    <h3>🧙‍♂️ 墜入魔法：哈利波特影城</h3>
+                    <p>既然行前特地做了名為 Lumos 的網站，魔法世界絕對是此行的心臟。我們早上 11 點踏入影城，等回過神來已經是下午兩點多。整個園區的細節龐大且極度精緻，那些曾經只存在於螢幕裡的光影，就這樣真實地鋪展在眼前。</p>
+                    
+                    <h3>🚇 交通實境解謎</h3>
+                    <p>東京的地下鐵，本身就是一場大型密室逃脫。為了領 Skyliner 車票，我們在標示成謎的地下室迷航，甚至一度因為網路卡頓打不開憑證 PDF，急出一身冷汗。看著錯綜複雜、同時並行的幾條地鐵線，真的有種《今際之國的闖關者》的既視感。尤其是最後一天，拉著 20 公斤的行李在車站裡無盡地上上下下，這根本不是旅行，是極限重訓！</p>
+                </div>
+                <img src="https://lh3.googleusercontent.com/pw/AP1GczODCl8GtvaAcSSI-5Ao30ahgfKVegXOkn8ZIKeTW9UtDoXAMcRUL1C194fXcKO53cLWhoKY0ooPL38o6wQm1R3vBUhRlceMn5GHKoCSJyoYZTFgUyaNwct1O1phNALiisbS00dSAuecpzLT8_47jPm1Qg=w1174-h1566-s-no-gm" alt="東京拉麵美食">
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-item">
+                    <h4>🛍️ 失心瘋的感謝祭</h4>
+                    <p>恰巧撞上 UNIQLO 和 GU 的感謝祭，4 件 T-shirt 結帳才 1,000 日幣上下。看著這近乎荒謬的物價，信用卡刷得一點都不心疼。</p>
+                </div>
+                <div class="feature-item">
+                    <h4>🍗 靈魂超商炸物</h4>
+                    <p>那些排隊名店固然好，但連續幾天的胃口，都是被 Lawson 的炸雞拯救的。鹽味清爽開胃，起司口味更是邪惡的絕讚。</p>
+                </div>
+                <div class="feature-item">
+                    <h4>🍖 舌尖上的衝擊</h4>
+                    <p>利久牛舌的鮮嫩、敘敘苑的奢華，以及那碗加了芥末卻毫不嗆辣的驚豔蕎麥麵。對了，那碗讓我陷入沉思的鴨肉拉麵——它到底是不是拉麵界的邪魔外道？</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Observations -->
+        <div class="glass-card reveal">
+            <h2>👁️ 旅人視角：無微不至的社會觀察</h2>
+            <div class="split-grid">
+                <img src="https://lh3.googleusercontent.com/pw/AP1GczP85rPykRt2_rfsmpvZdJ-EaIZnKRey1Qeha-hIbHGCuSFJZvpLv6p2xQyNlf3J1DlGswlYPqmd9_5lEC66LtuYLWqmYFOcl-ypMi52f7ES5bN_ObqZS16jAMqtu-l4jnF5OiOc-hZ3Fa-TfgYzWOfG4g=w2088-h1566-s-no-gm" alt="故宮紀念品">
+                <div>
+                    <ul style="list-style-type: none;">
+                        <li style="margin-bottom: 1.5rem;">
+                            <strong style="color: var(--accent-gold); font-size: 1.2rem;">🚶‍♂️ 神奇的日本體質</strong><br>
+                            每天步數穩定突破 1.5 萬，終於破案「為什麼日本人沒胖子」。不管男女老少，地鐵上的面容都透著深深的疲倦，但那些白髮蒼蒼的上班族，依舊堅持著西裝筆挺的倔強。
+                        </li>
+                        <li style="margin-bottom: 1.5rem;">
+                            <strong style="color: var(--accent-gold); font-size: 1.2rem;">📦 壓縮到極致的空間</strong><br>
+                            這是一座不容許浪費一丁點空間的城市。坐上廁所馬桶，膝蓋離門板竟然只有半個拳頭的距離，那種壓迫感，連上個大號都覺得無法舒展靈魂。
+                        </li>
+                        <li style="margin-bottom: 1.5rem;">
+                            <strong style="color: var(--accent-gold); font-size: 1.2rem;">🤫 I 人極度友善</strong><br>
+                            麥當勞裡完美的一人一格座位；地鐵上默契十足的「先下後上」與絕對的安靜。大家互不打擾，在擁擠中保持著冰冷卻禮貌的距離。
+                        </li>
+                        <li>
+                            <strong style="color: var(--accent-gold); font-size: 1.2rem;">🔍 街頭迷惑與冷知識</strong><br>
+                            日本人似乎很習慣「按了電梯卻不搭」；在娃娃機店見識到能把娃娃抽真空壓扁的神奇機器。對了，西瓜卡 (Suica) 是不能像香港八達通那樣欠款出站的！而吸菸區的「白名單」制，更是把癮君子管得服服貼貼。
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Photo Gallery -->
+        <div class="glass-card reveal">
+            <h2>📸 隨手捕捉的東京瞬間</h2>
+            <p>沒有人像，只有旅行中最真實的溫度與風景。</p>
+            <div class="gallery-grid">
+                <div class="gallery-item">
+                    <img src="https://lh3.googleusercontent.com/pw/AP1GczMYIAfoNdfxgtZpv4lQBW3W80nyO1AeG-EibTwTHrQvO-p-qtsP4Khdn05Kuvh0K4OkwOYtdhzpG0pqzoTCbs_ieFXP9hrleT6XdJmLZKkUZEIsOghdfKjXQRPOemTofHuITcNKE3hbgrEQqgDaBCUOHw=w1174-h1566-s-no-gm" alt="Bento Shelf">
+                    <div class="overlay">超市冷藏櫃</div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://lh3.googleusercontent.com/pw/AP1GczOFeFdbPmo5gSB40LFv-TTXj0-1hrQDQZje67S35XVkTo3b2Z011HS6UoJkClKLSbaJUh1fyIDzz0R4Fmzg_3CTljmK4OvMCYuzShjQrzcKpgY1SVh5VyvYfOPHRpRjDMgPR477_N8CSmk1hGjLFRTJfA=w1174-h1566-s-no-gm" alt="Information Board">
+                    <div class="overlay">月台指標</div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://lh3.googleusercontent.com/pw/AP1GczPDvEf17U7yrowdKN4oN6CRXd_74RvQh-oDz8_hxcAI5R2ZGzym1AGpfqjPkcJECWw5f11wV1OPz9qeG9jBOAfnjZ06lg4tcTJeynK2qI_vLYhdOVBKvGMLxjNMmrvD4H7icCl6lot3JkhJeLMFZ_Bcsw=w2088-h1566-s-no-gm" alt="Train Wrap">
+                    <div class="overlay">哈利波特列車</div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://lh3.googleusercontent.com/pw/AP1GczM-hoQBVfuxd0aZBMrIQyrSGAfecsWj387gfja9-HUaU9wGcu3_4S51dKfLEcYlCSLa6yV0UVVmRT1OPPg8oi3MRTEEe1cT5103naL-IkR8YHiIL-1U5Hqc9zPyKPG6eLgaDQ4wcZcfLEcRjw5PD4089A=w2088-h1566-s-no-gm" alt="Railway Track">
+                    <div class="overlay">日本鐵道日常</div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://lh3.googleusercontent.com/pw/AP1GczPuohhzCn6D3TtaSemjYNfeAXBq1qMU7rtOBtjs-C5QKLZopPb1ZsKeaMfAxXLLRw2Se3_Uz9eNN2uxI_qnJWtcXOVYGoJiHwTHgL1bnbSl-MJhHBtUAsCqnaNkiUuy82YryUwbtybdTw4aiHohjRmwGQ=w2088-h1566-s-no-gm" alt="Giant Letter">
+                    <div class="overlay">霍格華茲入學信</div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://lh3.googleusercontent.com/pw/AP1GczNQxkyMWmjyMAAhPbZo-LTvhezhtAppJGAyxkS9_NYFDkMLb3AdqQqb5XZQaLs7dtGHTAhCMaKQaP9jWPEmb8R3iYK0LP6p-gIODowEjj-k0gRXUpDZNfFu3E_Z6j7mSLa3oOWftn39TuS2qfoIsX9UEA=w2088-h1566-s-no-gm" alt="Hogwarts Drinks">
+                    <div class="overlay">四學院魔法特調</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Expenses -->
+        <div class="stats-box reveal">
+            <h2>💰 現實的魔法代價</h2>
+            <p>這趟吃好買滿、有敘敘苑也有哈利波特的 6 天之旅，到底燒了多少錢？</p>
+            <div class="total-expense">NT$ 45,957</div>
+            <p style="font-size: 0.9rem; color: #888;">細項：5,664 + 39,220 + 1,073</p>
+            <p style="margin-top: 1rem; color: var(--accent-gold);">用不到五萬塊換來這等豐富度，CP 值簡直突破天際。</p>
+        </div>
+
+    </div>
+
+    <!-- JavaScript for Scroll Animation -->
+    <script>
+        function reveal() {
+            var reveals = document.querySelectorAll(".reveal");
+            for (var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[i].getBoundingClientRect().top;
+                var elementVisible = 100;
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add("active");
+                }
+            }
+        }
+        window.addEventListener("scroll", reveal);
+        reveal(); // Trigger on load
+    </script>
+</body>
+</html>
